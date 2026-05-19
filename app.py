@@ -21,7 +21,7 @@ SPREADSHEET_ID = "1PwgH2BifhLuColS8LhUpZuA_yWunfBmSiBYq3dad15c"
 # メイン画面の構築
 # =============================================================================
 st.title("🌱 商品ロス購入入力フォーム 🌱")
-st.markdown("<p style='text-align: center;'>買う商品をえらんで、最後に「送信」を押してください。</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>必要な情報を入力し、最後に「送信」を押してください。</p>", unsafe_allow_html=True)
 st.write("")
 
 # 送信完了フラグのチェックと表示
