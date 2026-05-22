@@ -5,8 +5,8 @@ from datetime import datetime
 import pytz
 
 # --- ページ設定 ---
-st.set_page_config(page_title="商品ロス購買入力", layout="centered")
-st.title("📝 商品ロス購買入力")
+st.set_page_config(page_title="商品ロス購入入力", layout="centered")
+st.title("📝 商品ロス購入入力")
 
 # --- 1. スプレッドシートへの接続準備 ---
 def get_sheet():
@@ -21,8 +21,8 @@ def get_sheet():
     gc = gspread.authorize(credentials)
     
     # ⚠️ 【重要】ここに実際の「スプレッドシートのキー」を入れてください
-    SPREADSHEET_KEY = "ここにスプレッドシートのキー（URLの一部）を入れます" 
-    WORKSHEET_NAME = "シート1" # 実際のシート名に変更してください
+    SPREADSHEET_KEY = "1PwgH2BifhLuColS8LhUpZuA_yWunfBmSiBYq3dad15c" 
+    WORKSHEET_NAME = "購入商品" # 実際のシート名に変更してください
     
     worksheet = gc.open_by_key(SPREADSHEET_KEY).worksheet(WORKSHEET_NAME)
     return worksheet
@@ -45,7 +45,10 @@ st.markdown("---")
 # --- 3. 商品の入力と「商品追加」ボタン ---
 st.write("🛍️ ロスにする商品の情報を入力して、下の「商品追加」を押してください。")
 
-departments = ["鮮魚", "精肉", "青果", "惣菜", "食品", "レジ", "その他"]
+departments = ['牛肉', '豚肉', '鶏肉', '加工肉', '鮮魚', '塩干', '酒', '野菜',
+    '果物', '酪農品', '乳製品', 'デザート', '飲料', '和日配',
+    '冷食', '卵', '加工食品', '菓子', '幸福堂', '米', 'パティスリ',
+    '惣菜', '冷菜', 'パン']
 department = st.selectbox("部門", departments)
 
 quantity = st.number_input("個数", min_value=1, step=1, value=1)
