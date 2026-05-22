@@ -6,7 +6,7 @@ import pytz
 
 # --- ページ設定 ---
 st.set_page_config(page_title="商品ロス購入入力", layout="centered")
-st.title("🐈 商品ロス購入入力")
+st.title("🐈 商品ロス購入入力 🐈")
 
 # --- 1. スプレッドシートへの接続準備 ---
 def get_sheet():
