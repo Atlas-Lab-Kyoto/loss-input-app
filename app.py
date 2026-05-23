@@ -133,7 +133,7 @@ if st.session_state.loss_list:
                         ])
                     
                     sheet = get_sheet()
-                    sheet.append_rows(rows_to_append)
+                    sheet.append_rows(rows_to_append, value_input_option='USER_ENTERED')
                     
                     st.success("✨ すべてのデータをスプレッドシートに送信しました！")
                     st.session_state.loss_list = []
