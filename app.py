@@ -5,8 +5,8 @@ from datetime import datetime
 import pytz
 
 # --- ページ設定 ---
-st.set_page_config(page_title="商品ロス購入入力", layout="centered")
-st.title("🐈 商品ロス購入入力 🐈")
+st.set_page_config(page_title="商品ロス購入入力", page_icon="🐱", layout="centered")
+st.title("🐱 商品ロス購入入力")
 
 # --- 1. スプレッドシートへの接続準備 ---
 def get_sheet():
@@ -27,13 +27,20 @@ def get_sheet():
     worksheet = gc.open_by_key(SPREADSHEET_KEY).worksheet(WORKSHEET_NAME)
     return worksheet
 
+# --- 2. 【設定エリア】お店の部門リスト ---
+# ⚠️ 実際の24部門に書き換えてください
+departments = [
+    '牛肉', '豚肉', '鶏肉', '加工肉', '鮮魚', '塩干', '酒', '野菜',
+    '果物', '酪農品', '乳製品', 'デザート', '飲料', '和日配',
+    '冷食', '卵', '加工食品', '菓子', '幸福堂', '米', 'パティスリ',
+    '惣菜', '冷菜', 'パン'
+]
 
 # --- セッション状態（一時保存用リスト）の初期化 ---
 if "loss_list" not in st.session_state:
     st.session_state.loss_list = []
 
-
-# --- 2. 基本情報の入力 ---
+# --- 3. 基本情報の入力 ---
 st.write("必要事項を入力してください。")
 
 emp_type = st.radio("雇用形態", ["正社員", "パート・アルバイト"])
@@ -41,30 +48,22 @@ name = st.text_input("お名前")
 
 st.markdown("---")
 
+# --- 4. 商品の入力と「商品追加」ボタン ---
+st.write("🛍️ ロスにする商品の情報を入力して、下の「商品追加」を押してください。")
 
-# --- 3. 商品の入力と「商品追加」ボタン ---
-st.write("🐈 ロスにする商品の情報を入力して、下の「商品追加」を押してください。")
-
-departments = ['牛肉', '豚肉', '鶏肉', '加工肉', '鮮魚', '塩干', '酒', '野菜',
-    '果物', '酪農品', '乳製品', 'デザート', '飲料', '和日配',
-    '冷食', '卵', '加工食品', '菓子', '幸福堂', '米', 'パティスリ',
-    '惣菜', '冷菜', 'パン']
 department = st.selectbox("部門", departments)
+quantity = st.number_input("個数（点）", min_value=1, step=1, value=1)
 
-quantity = st.number_input("個数", min_value=1, step=1, value=1)
-price = st.number_input("金額（単価）", min_value=0, step=1, value=0)
-
-total_price = quantity * price
-st.write(f"現在の商品の合計: {total_price:,} 円")
+# 💡 修正①：単価の掛け算を廃止し、各自が合算した金額を直接入力する形に変更
+total_price = st.number_input("金額（合計額）", min_value=0, step=1, value=0)
 
 # 商品追加ボタン
 if st.button("➕ 商品追加", use_container_width=True):
     if name == "":
         st.warning("⚠️ お名前を入力してください。")
-    elif price == 0:
+    elif total_price == 0:
         st.warning("⚠️ 金額を入力してください。")
     else:
-        # 日本時間の日付を裏で自動取得
         jst = pytz.timezone('Asia/Tokyo')
         current_date = datetime.now(jst).strftime('%Y-%m-%d')
         
@@ -74,7 +73,6 @@ if st.button("➕ 商品追加", use_container_width=True):
             "name": name,
             "dept": department,
             "qty": quantity,
-            "price": price,
             "total": total_price
         }
         st.session_state.loss_list.append(item_entry)
@@ -82,38 +80,35 @@ if st.button("➕ 商品追加", use_container_width=True):
 
 st.markdown("---")
 
-
-# --- 4. 追加された商品の一覧表示（確認画面） ---
+# --- 5. 追加された商品の一覧表示（確認画面） ---
 if st.session_state.loss_list:
     st.markdown("### 📋 送信待ちの商品リスト")
     
     grand_total = 0
-    # 🛠️ 各商品の横に削除ボタンを並べるために、画面を横に分割（分割比率 5:1）します
     for idx, item in enumerate(st.session_state.loss_list):
         col1, col2 = st.columns([5, 1])
         
         with col1:
-            # 左側に商品の詳細を表示
-            st.write(f"**{idx + 1}. 【{item['dept']}】** {item['qty']}個 × {item['price']:,}円 ＝ **{item['total']:,}円** （入力: {item['name']}さん）")
+            # 💡 修正②：名前の表示を消し、文字サイズを大きく（###を使用）して視認性をアップ
+            st.markdown(f"### {idx + 1}. 【{item['dept']}】 {item['qty']}点 / {item['total']:,}円")
         
         with col2:
-            # 右側にその行専用の削除ボタンを配置（keyを1件ずつ変えるのがコツです）
             if st.button("🗑️ 削除", key=f"delete_{idx}"):
-                st.session_state.loss_list.pop(idx) # リストからこの1件だけを削除
-                st.rerun() # 画面をパッと再描画
+                st.session_state.loss_list.pop(idx)
+                st.rerun()
                 
         grand_total += item['total']
         
-    st.markdown(f"📊 **現在の総合計金額: {grand_total:,} 円**")
+    # 総合計もさらに大きく表示
+    st.markdown(f"## 📊 総合計: {grand_total:,} 円")
     
-    # 全消去ボタンも一応残しておきます
     if st.button("リストをすべて消去してやり直す"):
         st.session_state.loss_list = []
         st.rerun()
 
     st.markdown("---")
     
-    # --- 5. チェックボックスと一括送信ボタン ---
+    # --- 6. チェックボックスと一括送信ボタン ---
     confirm = st.checkbox("入力内容に間違いがないことを確認しました")
 
     if confirm:
@@ -128,11 +123,12 @@ if st.session_state.loss_list:
                             item["name"],
                             item["dept"],
                             item["qty"],
-                            item["price"],
-                            item["total"]
+                            "",             # F列（単価）は使わないため空欄で送信
+                            item["total"]   # G列（合計金額）に入力された合計額を送信
                         ])
                     
                     sheet = get_sheet()
+                    # 前回修正した日付認識の魔法（USER_ENTERED）もそのまま維持しています
                     sheet.append_rows(rows_to_append, value_input_option='USER_ENTERED')
                     
                     st.success("✨ すべてのデータをスプレッドシートに送信しました！")
