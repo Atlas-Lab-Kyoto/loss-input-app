@@ -49,7 +49,7 @@ name = st.text_input("お名前")
 st.markdown("---")
 
 # --- 4. 商品の入力と「商品追加」ボタン ---
-st.write("🛍️ ロスにする商品の情報を入力して、下の「商品追加」を押してください。")
+st.write("🛍️ ロス商品の情報を入力して、下の「商品追加」を押してください。")
 
 department = st.selectbox("部門", departments)
 quantity = st.number_input("個数（点）", min_value=1, step=1, value=1)
