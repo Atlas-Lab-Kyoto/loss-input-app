@@ -8,22 +8,22 @@ import pytz
 st.set_page_config(page_title="商品ロス購入入力", page_icon="🐱", layout="centered")
 st.title("🐱 商品ロス購入入力")
 
-# ✨ 修正ポイント：部門の枠がしっかり広がるようにCSSを強化しました
+
 st.markdown("""
     <style>
     /* 名前・個数・金額の入力ボックス */
     .stTextInput input, .stNumberInput input {
         font-size: 28px !important;
-        height: 70px !important;  /* 縦幅をさらに拡張 */
+        height: 65px !important;  /* 70pxから少しだけスッキリさせました */
         font-weight: 500;
     }
     
-    /* 部門選択（セレクトボックス）の枠と文字を広げる */
+    /* 部門選択（セレクトボックス）の微調整 */
     .stSelectbox div[data-baseweb="select"] > div {
-        min-height: 70px !important; /* 縦幅をさらに拡張 */
+        min-height: 60px !important; /* 広がりすぎた縦幅を少し抑えました */
     }
     .stSelectbox div[data-baseweb="select"] * {
-        font-size: 28px !important; /* 中の文字も大きく */
+        font-size: 28px !important; 
     }
 
     /* 雇用形態（ラジオボタン）の選択肢 */
@@ -34,7 +34,7 @@ st.markdown("""
     /* 「商品追加」や「送信」ボタン */
     .stButton button {
         font-size: 24px !important;
-        height: 65px !important; /* ボタンも少し縦長に */
+        height: 65px !important;
     }
     </style>
 """, unsafe_allow_html=True)
