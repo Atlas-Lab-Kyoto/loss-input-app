@@ -14,13 +14,13 @@ st.markdown("""
     /* 名前・個数・金額の入力ボックス */
     .stTextInput input, .stNumberInput input {
         font-size: 28px !important;
-        height: 65px !important;  /* 70pxから少しだけスッキリさせました */
+        height: 65px !important;  
         font-weight: 500;
     }
     
     /* 部門選択（セレクトボックス）の微調整 */
     .stSelectbox div[data-baseweb="select"] > div {
-        min-height: 60px !important; /* 広がりすぎた縦幅を少し抑えました */
+        min-height: 60px !important; 
     }
     .stSelectbox div[data-baseweb="select"] * {
         font-size: 28px !important; 
@@ -35,6 +35,15 @@ st.markdown("""
     .stButton button {
         font-size: 24px !important;
         height: 65px !important;
+    }
+
+    /* ☑️ 送信確認チェックボックスの枠と文字を大きく */
+    div[data-testid="stCheckbox"] label p {
+        font-size: 24px !important; /* 文字を大きく */
+    }
+    div[data-testid="stCheckbox"] div[role="checkbox"] {
+        transform: scale(1.5); /* 四角いチェック枠を1.5倍に拡大 */
+        margin-right: 15px;    /* 枠と文字の間に少し余裕を持たせる */
     }
     </style>
 """, unsafe_allow_html=True)
