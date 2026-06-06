@@ -41,21 +41,30 @@ if "loss_list" not in st.session_state:
     st.session_state.loss_list = []
 
 # --- 3. 基本情報の入力 ---
-st.write("必要事項を入力してください。")
+st.markdown("## 👤 担当者情報")
 
-emp_type = st.radio("雇用形態", ["正社員", "パート・アルバイト"])
-name = st.text_input("お名前")
+# 💡 小さな標準ラベルを隠し（label_visibility="collapsed"）、大きな文字を上に配置しています
+st.markdown("### 雇用形態")
+emp_type = st.radio("雇用形態", ["正社員", "パート・アルバイト"], label_visibility="collapsed")
+
+st.markdown("### お名前")
+name = st.text_input("お名前", label_visibility="collapsed")
 
 st.markdown("---")
 
 # --- 4. 商品の入力と「商品追加」ボタン ---
-st.write("🛍️ ロス商品の情報を入力して、下の「商品追加」を押してください。")
+st.markdown("## 🛍️ 商品情報の入力")
 
-department = st.selectbox("部門", departments)
-quantity = st.number_input("個数（点）", min_value=1, step=1, value=1)
+st.markdown("### 🏷️ 部門")
+department = st.selectbox("部門", departments, label_visibility="collapsed")
 
-# 💡 修正①：単価の掛け算を廃止し、各自が合算した金額を直接入力する形に変更
-total_price = st.number_input("金額（合計額）", min_value=0, step=1, value=0)
+st.markdown("### 📦 個数（点）")
+quantity = st.number_input("個数（点）", min_value=1, step=1, value=1, label_visibility="collapsed")
+
+st.markdown("### 💰 金額（合計額）")
+total_price = st.number_input("金額（合計額）", min_value=0, step=1, value=0, label_visibility="collapsed")
+
+st.write("") # ボタンの上の少し隙間を空ける
 
 # 商品追加ボタン
 if st.button("➕ 商品追加", use_container_width=True):
@@ -82,14 +91,13 @@ st.markdown("---")
 
 # --- 5. 追加された商品の一覧表示（確認画面） ---
 if st.session_state.loss_list:
-    st.markdown("### 📋 送信待ちの商品リスト")
+    st.markdown("## 📋 送信待ちリスト")
     
     grand_total = 0
     for idx, item in enumerate(st.session_state.loss_list):
         col1, col2 = st.columns([5, 1])
         
         with col1:
-            # 💡 修正②：名前の表示を消し、文字サイズを大きく（###を使用）して視認性をアップ
             st.markdown(f"### {idx + 1}. 【{item['dept']}】 {item['qty']}点 / {item['total']:,}円")
         
         with col2:
@@ -99,7 +107,6 @@ if st.session_state.loss_list:
                 
         grand_total += item['total']
         
-    # 総合計もさらに大きく表示
     st.markdown(f"## 📊 総合計: {grand_total:,} 円")
     
     if st.button("リストをすべて消去してやり直す"):
@@ -109,6 +116,7 @@ if st.session_state.loss_list:
     st.markdown("---")
     
     # --- 6. チェックボックスと一括送信ボタン ---
+    st.markdown("### ☑️ 送信確認")
     confirm = st.checkbox("入力内容に間違いがないことを確認しました")
 
     if confirm:
@@ -123,12 +131,11 @@ if st.session_state.loss_list:
                             item["name"],
                             item["dept"],
                             item["qty"],
-                            "",             # F列（単価）は使わないため空欄で送信
-                            item["total"]   # G列（合計金額）に入力された合計額を送信
+                            "",             
+                            item["total"]   
                         ])
                     
                     sheet = get_sheet()
-                    # 前回修正した日付認識の魔法（USER_ENTERED）もそのまま維持しています
                     sheet.append_rows(rows_to_append, value_input_option='USER_ENTERED')
                     
                     st.success("✨ すべてのデータをスプレッドシートに送信しました！")
