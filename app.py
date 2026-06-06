@@ -8,6 +8,33 @@ import pytz
 st.set_page_config(page_title="商品ロス購入入力", page_icon="🐱", layout="centered")
 st.title("🐱 商品ロス購入入力")
 
+# ✨ 修正ポイント：入力ボックスの中身やボタンの文字サイズを特大にする魔法（カスタムCSS）
+st.markdown("""
+    <style>
+    /* 名前・個数・金額の入力ボックスの文字を大きく、枠を太く */
+    .stTextInput input, .stNumberInput input {
+        font-size: 24px !important;
+        height: 60px !important;
+        font-weight: 500;
+    }
+    /* 部門選択（セレクトボックス）の文字を大きく、枠を太く */
+    .stSelectbox div[data-baseweb="select"] {
+        font-size: 24px !important;
+        min-height: 60px !important;
+    }
+    /* 雇用形態（ラジオボタン）の選択肢の文字を大きく */
+    div[data-testid="stRadio"] label p {
+        font-size: 22px !important;
+    }
+    /* 「商品追加」や「送信」ボタンの文字も大きくして押しやすく */
+    .stButton button {
+        font-size: 22px !important;
+        height: 55px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+
 # --- 1. スプレッドシートへの接続準備 ---
 def get_sheet():
     scopes = [
@@ -43,7 +70,6 @@ if "loss_list" not in st.session_state:
 # --- 3. 基本情報の入力 ---
 st.markdown("## 👤 担当者情報")
 
-# 💡 小さな標準ラベルを隠し（label_visibility="collapsed"）、大きな文字を上に配置しています
 st.markdown("### 雇用形態")
 emp_type = st.radio("雇用形態", ["正社員", "パート・アルバイト"], label_visibility="collapsed")
 
@@ -64,7 +90,7 @@ quantity = st.number_input("個数（点）", min_value=1, step=1, value=1, labe
 st.markdown("### 💰 金額（合計額）")
 total_price = st.number_input("金額（合計額）", min_value=0, step=1, value=0, label_visibility="collapsed")
 
-st.write("") # ボタンの上の少し隙間を空ける
+st.write("") # 隙間調整
 
 # 商品追加ボタン
 if st.button("➕ 商品追加", use_container_width=True):
