@@ -8,7 +8,7 @@ import pytz
 st.set_page_config(page_title="商品ロス購入入力", page_icon="🐱", layout="centered")
 st.title("🐱 商品ロス購入入力")
 
-
+# ✨ 修正ポイント：ラジオボタンとチェックボックスの「縦ズレ」を修正し、丸ポチも大きくしました
 st.markdown("""
     <style>
     /* 名前・個数・金額の入力ボックス */
@@ -26,7 +26,14 @@ st.markdown("""
         font-size: 28px !important; 
     }
 
-    /* 雇用形態（ラジオボタン）の選択肢 */
+    /* 雇用形態（ラジオボタン）の選択肢のズレ修正と拡大 */
+    div[data-testid="stRadio"] label {
+        align-items: center !important; /* 丸と文字を上下中央でピッタリ揃える */
+    }
+    div[data-testid="stRadio"] div[role="radio"] {
+        transform: scale(1.4); /* 丸ポチ自体を1.4倍に大きくしてバランスを取る */
+        margin-right: 12px;    /* 文字との間隔を調整 */
+    }
     div[data-testid="stRadio"] label p {
         font-size: 24px !important;
     }
@@ -37,13 +44,16 @@ st.markdown("""
         height: 65px !important;
     }
 
-    /* ☑️ 送信確認チェックボックスの枠と文字を大きく */
-    div[data-testid="stCheckbox"] label p {
-        font-size: 24px !important; /* 文字を大きく */
+    /* ☑️ 送信確認チェックボックスのズレ修正と拡大 */
+    div[data-testid="stCheckbox"] label {
+        align-items: center !important; /* 四角と文字を上下中央でピッタリ揃える */
     }
     div[data-testid="stCheckbox"] div[role="checkbox"] {
-        transform: scale(1.5); /* 四角いチェック枠を1.5倍に拡大 */
-        margin-right: 15px;    /* 枠と文字の間に少し余裕を持たせる */
+        transform: scale(1.5); 
+        margin-right: 15px;    
+    }
+    div[data-testid="stCheckbox"] label p {
+        font-size: 24px !important; 
     }
     </style>
 """, unsafe_allow_html=True)
