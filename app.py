@@ -8,7 +8,7 @@ import pytz
 st.set_page_config(page_title="商品ロス購入入力", page_icon="🐱", layout="centered")
 st.title("🐱 商品ロス購入入力")
 
-# ✨ 修正ポイント：ラジオボタンとチェックボックスの「縦ズレ」を修正し、丸ポチも大きくしました
+
 st.markdown("""
     <style>
     /* 名前・個数・金額の入力ボックス */
@@ -18,7 +18,7 @@ st.markdown("""
         font-weight: 500;
     }
     
-    /* 部門選択（セレクトボックス）の微調整 */
+    /* 部門選択（セレクトボックス本体）の微調整 */
     .stSelectbox div[data-baseweb="select"] > div {
         min-height: 60px !important; 
     }
@@ -26,13 +26,25 @@ st.markdown("""
         font-size: 28px !important; 
     }
 
+    /* 展開したあとのドロップダウンリストの文字と行間を大きく */
+    ul[data-testid="stVirtualDropdown"] li,
+    div[data-baseweb="popover"] ul li,
+    li[role="option"] {
+        font-size: 24px !important;
+        padding-top: 15px !important;  /* 上下の隙間を広げてタップしやすく */
+        padding-bottom: 15px !important;
+    }
+    li[role="option"] span {
+        font-size: 24px !important;
+    }
+
     /* 雇用形態（ラジオボタン）の選択肢のズレ修正と拡大 */
     div[data-testid="stRadio"] label {
-        align-items: center !important; /* 丸と文字を上下中央でピッタリ揃える */
+        align-items: center !important; 
     }
     div[data-testid="stRadio"] div[role="radio"] {
-        transform: scale(1.4); /* 丸ポチ自体を1.4倍に大きくしてバランスを取る */
-        margin-right: 12px;    /* 文字との間隔を調整 */
+        transform: scale(1.4); 
+        margin-right: 12px;    
     }
     div[data-testid="stRadio"] label p {
         font-size: 24px !important;
@@ -46,7 +58,7 @@ st.markdown("""
 
     /* ☑️ 送信確認チェックボックスのズレ修正と拡大 */
     div[data-testid="stCheckbox"] label {
-        align-items: center !important; /* 四角と文字を上下中央でピッタリ揃える */
+        align-items: center !important; 
     }
     div[data-testid="stCheckbox"] div[role="checkbox"] {
         transform: scale(1.5); 
@@ -84,7 +96,7 @@ departments = [
     '牛肉', '豚肉', '鶏肉', '加工肉', '鮮魚', '塩干', '酒', '野菜',
     '果物', '酪農品', '乳製品', 'デザート', '飲料', '和日配',
     '冷食', '卵', '加工食品', '菓子', '幸福堂', '米', 'パティスリ',
-    '惣菜', '冷菜', 'パン'
+    '惣菜', '冷果', 'パン'
 ]
 
 # --- セッション状態（一時保存用リスト）の初期化 ---
@@ -166,7 +178,7 @@ if st.session_state.loss_list:
     st.markdown("---")
     
     # --- 6. チェックボックスと一括送信ボタン ---
-    st.markdown("### 送信確認")
+    st.markdown("### ☑️ 送信確認")
     confirm = st.checkbox("入力内容に間違いがないことを確認しました")
 
     if confirm:
