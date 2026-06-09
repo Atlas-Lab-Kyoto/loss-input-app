@@ -178,7 +178,7 @@ if st.session_state.loss_list:
     st.markdown("---")
     
     # --- 6. チェックボックスと一括送信ボタン ---
-    st.markdown("### ☑️ 送信確認")
+    st.markdown("### 送信確認")
     confirm = st.checkbox("入力内容に間違いがないことを確認しました")
 
     if confirm:
